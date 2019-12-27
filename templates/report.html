@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ event_year }} {{ event_name }}</title>
+</head>
+<body>
+<h1>{{ event_year }} {{ event_name }}</h1>
+<a href="#statistics">Jump to Statistics</a>
+<table border=1 frame=void rules=rows>
+    <tr>
+        <th>Team Number</th>
+        <th>Team Name</th>
+        <th>Rookie Year</th>
+        <th>Past Event Wins</th>
+        <th>Past Event Finalists</th>
+        <th>Past Chairman's</th>
+        <th>Past EI</th>
+    </tr>
+    {% for team in team_infos %}
+        <tr>
+            <td>{{ team.team_number }}</td>
+            <td>{{ team.team_name }}</td>
+            <td>{{ team.rookie_year }}</td>
+            <td>
+                <b>{{ team.past_winner|length }}</b>
+                {% for event in team.past_winner %}
+                    {{ event }},
+                {% endfor %}
+            </td>
+            <td>
+                <b>{{ team.past_finalist|length }}</b>
+                {% for event in team.past_finalist %}
+                    {{ event }},
+                {% endfor %}
+            </td>
+            <td>
+                <b>{{ team.past_chairmans|length }}</b>
+                {% for event in team.past_chairmans %}
+                    {{ event }},
+                {% endfor %}
+            </td>
+            <td>
+                <b>{{ team.past_ei|length }}</b>
+                {% for event in team.past_ei %}
+                    {{ event }},
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<a name="statistics"></a>
+<table border=1 frame=void rules=columns width="100%">
+    <tr>
+        <td width="(100/4)%">
+            <table border=1 frame=void rules=rows>
+                <tr>
+                    <th>
+                        <h2>Top Win Count</h2>
+                    </th>
+                </tr>
+                {% for team in report.most_wins %}
+                    <tr>
+                        <td>
+                            {{ team[0] }}: {{ team[1] }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </td>
+        <td width="(100/4)%">
+            <table border=1 frame=void rules=rows>
+                <tr>
+                    <th>
+                        <h2>Top Finalist Count</h2>
+                    </th>
+                </tr>
+                {% for team in report.most_finalist %}
+                    <tr>
+                        <td>
+                            {{ team[0] }}: {{ team[1] }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </td>
+        <td width="(100/4)%">
+            <table border=1 frame=void rules=rows>
+                <tr>
+                    <th>
+                        <h2>Top Chairman's Count</h2>
+                    </th>
+                </tr>
+                {% for team in report.most_chairmans %}
+                    <tr>
+                        <td>
+                            {{ team[0] }}: {{ team[1] }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </td>
+        <td width="(100/4)%">
+            <table border=1 frame=void rules=rows>
+                <tr>
+                    <th>
+                        <h2>Top EI Count</h2>
+                    </th>
+                </tr>
+                {% for team in report.most_ei %}
+                    <tr>
+                        <td>
+                            {{ team[0] }}: {{ team[1] }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
