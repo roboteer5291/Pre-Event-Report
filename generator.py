@@ -35,15 +35,23 @@ def get_team_infos(full_teams=[]):
             if award.award_type == 0:  # Chairman's
                 if tba.event(event=award.event_key, simple=True).event_type not in [99, 100]:
                     team_info.past_chairmans.append(award.event_key)
+                    if int(award.event_key[:4]) >= int(report.event_code[:4]) - 5:
+                        team_info.past_chairmans_5_years.append(award.event_key)
             elif award.award_type == 9:  # EI
                 if tba.event(event=award.event_key, simple=True).event_type not in [99, 100]:
                     team_info.past_ei.append(award.event_key)
+                    if int(award.event_key[:4]) >= int(report.event_code[:4]) - 5:
+                        team_info.past_ei_5_years.append(award.event_key)
             elif award.award_type == 1:  # Winner
                 if tba.event(event=award.event_key, simple=True).event_type not in [99, 100]:
                     team_info.past_winner.append(award.event_key)
+                    if int(award.event_key[:4]) >= int(report.event_code[:4]) - 5:
+                        team_info.past_winner_5_years.append(award.event_key)
             elif award.award_type == 2:  # Finalist
                 if tba.event(event=award.event_key, simple=True).event_type not in [99, 100]:
                     team_info.past_finalist.append(award.event_key)
+                    if int(award.event_key[:4]) >= int(report.event_code[:4]) - 5:
+                        team_info.past_finalist_5_years.append(award.event_key)
         report.team_infos.append(team_info)
 
 
@@ -56,24 +64,48 @@ def generate_statistics():
         if len(teams[i].past_winner) == 0:
             break
         report.most_wins.append([teams[i].team_number, len(teams[i].past_winner)])
+    # Event wins 5 years
+    teams.sort(key=lambda x: len(x.past_winner_5_years), reverse=True)
+    for i in range(10):
+        if len(teams[i].past_winner_5_years) == 0:
+            break
+        report.most_wins_5_years.append([teams[i].team_number, len(teams[i].past_winner_5_years)])
     # Event finalist
     teams.sort(key=lambda x: len(x.past_finalist), reverse=True)
     for i in range(10):
         if len(teams[i].past_finalist) == 0:
             break
         report.most_finalist.append([teams[i].team_number, len(teams[i].past_finalist)])
-    # Chairman's
+    # Event finalist 5 years
+    teams.sort(key=lambda x: len(x.past_finalist_5_years), reverse=True)
+    for i in range(10):
+        if len(teams[i].past_finalist_5_years) == 0:
+            break
+        report.most_finalist_5_years.append([teams[i].team_number, len(teams[i].past_finalist_5_years)])
+    # Event chairmans
     teams.sort(key=lambda x: len(x.past_chairmans), reverse=True)
     for i in range(10):
         if len(teams[i].past_chairmans) == 0:
             break
         report.most_chairmans.append([teams[i].team_number, len(teams[i].past_chairmans)])
-    # EI
+    # Event chairmans 5 years
+    teams.sort(key=lambda x: len(x.past_chairmans_5_years), reverse=True)
+    for i in range(10):
+        if len(teams[i].past_chairmans_5_years) == 0:
+            break
+        report.most_chairmans_5_years.append([teams[i].team_number, len(teams[i].past_chairmans_5_years)])
+    # Event ei
     teams.sort(key=lambda x: len(x.past_ei), reverse=True)
     for i in range(10):
         if len(teams[i].past_ei) == 0:
             break
         report.most_ei.append([teams[i].team_number, len(teams[i].past_ei)])
+    # Event ei 5 years
+    teams.sort(key=lambda x: len(x.past_ei_5_years), reverse=True)
+    for i in range(10):
+        if len(teams[i].past_ei_5_years) == 0:
+            break
+        report.most_ei_5_years.append([teams[i].team_number, len(teams[i].past_ei_5_years)])
 
 
 def generate_report(event_code="2020mibel"):

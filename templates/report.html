@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ event_year }} {{ event_name }}</title>
+    <style>
+        th, tr, td {
+            text-align: center;
+        }
+        table .most_data {
+            border-left:1px solid black;
+        }
+    </style>
 </head>
 <body>
 <h1>{{ event_year }} {{ event_name }}</h1>
@@ -12,10 +20,10 @@
         <th>Team Number</th>
         <th>Team Name</th>
         <th>Rookie Year</th>
-        <th>Past Event Wins</th>
-        <th>Past Event Finalists</th>
-        <th>Past Chairman's</th>
-        <th>Past EI</th>
+        <th>Past Event Wins (5 years)</th>
+        <th>Past Event Finalists (5 years)</th>
+        <th>Past Chairman's (5 years)</th>
+        <th>Past EI (5 years)</th>
     </tr>
     {% for team in team_infos %}
         <tr>
@@ -23,96 +31,192 @@
             <td>{{ team.team_name }}</td>
             <td>{{ team.rookie_year }}</td>
             <td>
-                <b>{{ team.past_winner|length }}</b>
+                <b>{{ team.past_winner|length }} ({{ team.past_winner_5_years|length }})</b>
                 {% for event in team.past_winner %}
-                    {{ event }},
+                    {% if event not in team.past_winner_5_years %}
+                        {{ event }},
+                    {% endif %}
                 {% endfor %}
+                {% if team.past_winner_5_years|length > 0 %}
+                    <b>(</b>
+                    {% for event in team.past_winner %}
+                        {% if event in team.past_winner_5_years %}
+                            {{ event }},
+                        {% endif %}
+                    {% endfor %}
+                    <b>)</b>
+                {% endif %}
             </td>
             <td>
-                <b>{{ team.past_finalist|length }}</b>
+                <b>{{ team.past_finalist|length }} ({{ team.past_finalist_5_years|length }})</b>
                 {% for event in team.past_finalist %}
-                    {{ event }},
+                    {% if event not in team.past_finalist_5_years %}
+                        {{ event }},
+                    {% endif %}
                 {% endfor %}
+                {% if team.past_finalist_5_years|length > 0 %}
+                    <b>(</b>
+                    {% for event in team.past_finalist %}
+                        {% if event in team.past_finalist_5_years %}
+                            {{ event }},
+                        {% endif %}
+                    {% endfor %}
+                    <b>)</b>
+                {% endif %}
             </td>
             <td>
-                <b>{{ team.past_chairmans|length }}</b>
+                <b>{{ team.past_chairmans|length }} ({{ team.past_chairmans_5_years|length }})</b>
                 {% for event in team.past_chairmans %}
-                    {{ event }},
+                    {% if event not in team.past_chairmans_5_years %}
+                        {{ event }},
+                    {% endif %}
                 {% endfor %}
+                {% if team.past_chairmans_5_years|length > 0 %}
+                    <b>(</b>
+                    {% for event in team.past_chairmans %}
+                        {% if event in team.past_chairmans_5_years %}
+                            {{ event }},
+                        {% endif %}
+                    {% endfor %}
+                    <b>)</b>
+                {% endif %}
             </td>
             <td>
-                <b>{{ team.past_ei|length }}</b>
+                <b>{{ team.past_ei|length }} ({{ team.past_ei_5_years|length }})</b>
                 {% for event in team.past_ei %}
-                    {{ event }},
+                    {% if event not in team.past_ei_5_years %}
+                        {{ event }},
+                    {% endif %}
                 {% endfor %}
+                {% if team.past_ei_5_years|length > 0 %}
+                    <b>(</b>
+                    {% for event in team.past_ei %}
+                        {% if event in team.past_ei_5_years %}
+                            {{ event }},
+                        {% endif %}
+                    {% endfor %}
+                    <b>)</b>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}
 </table>
 <a name="statistics"></a>
 <table border=1 frame=void rules=columns width="100%">
-    <tr>
+    <tr class="most_row">
         <td width="(100/4)%">
             <table border=1 frame=void rules=rows>
-                <tr>
-                    <th>
-                        <h2>Top Win Count</h2>
+                <tr class="most_row">
+                    <th class="most_data" colspan="2">
+                        Most Wins
                     </th>
                 </tr>
-                {% for team in report.most_wins %}
-                    <tr>
-                        <td>
-                            {{ team[0] }}: {{ team[1] }}
-                        </td>
-                    </tr>
+                <tr class="most_row">
+                    <th class="most_data">All-Time</th>
+                    <th class="most_data">Past 5 Years</th>
+                </tr>
+                {% for i in range(10) %}
+                    {% if i < report.most_wins|length or i < report.most_wins_5_years|length %}
+                        <tr>
+                            <td class="most_data">
+                                {% if i < report.most_wins|length %}
+                                    {{ report.most_wins[i][0] }}: {{ report.most_wins[i][1] }}
+                                {% endif %}
+                            </td>
+                            <td class="most_data">
+                                {% if i < report.most_wins_5_years|length %}
+                                    {{ report.most_wins_5_years[i][0] }}: {{ report.most_wins_5_years[i][1] }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
         </td>
         <td width="(100/4)%">
             <table border=1 frame=void rules=rows>
-                <tr>
-                    <th>
-                        <h2>Top Finalist Count</h2>
+                <tr class="most_row">
+                    <th class="most_data" colspan="2">
+                        Most Finalists
                     </th>
                 </tr>
-                {% for team in report.most_finalist %}
-                    <tr>
-                        <td>
-                            {{ team[0] }}: {{ team[1] }}
-                        </td>
-                    </tr>
+                <tr class="most_row">
+                    <th class="most_data">All-Time</th>
+                    <th class="most_data">Past 5 Years</th>
+                </tr>
+                {% for i in range(10) %}
+                    {% if i < report.most_wins|length or i < report.most_wins_5_years|length %}
+                        <tr class="most_row">
+                            <td class="most_data">
+                                {% if i < report.most_finalist|length %}
+                                    {{ report.most_finalist[i][0] }}: {{ report.most_finalist[i][1] }}
+                                {% endif %}
+                            </td>
+                            <td class="most_data">
+                                {% if i < report.most_finalist_5_years|length %}
+                                    {{ report.most_finalist_5_years[i][0] }}: {{ report.most_finalist_5_years[i][1] }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
         </td>
         <td width="(100/4)%">
             <table border=1 frame=void rules=rows>
-                <tr>
-                    <th>
-                        <h2>Top Chairman's Count</h2>
+                <tr class="most_row">
+                    <th class="most_data" colspan="2">
+                        Most Chairman's
                     </th>
                 </tr>
-                {% for team in report.most_chairmans %}
-                    <tr>
-                        <td>
-                            {{ team[0] }}: {{ team[1] }}
-                        </td>
-                    </tr>
+                <tr class="most_row">
+                    <th class="most_data">All-Time</th>
+                    <th class="most_data">Past 5 Years</th>
+                </tr>
+                {% for i in range(10) %}
+                    {% if i < report.most_wins|length or i < report.most_wins_5_years|length %}
+                        <tr class="most_row">
+                            <td class="most_data">
+                                {% if i < report.most_chairmans|length %}
+                                    {{ report.most_chairmans[i][0] }}: {{ report.most_chairmans[i][1] }}
+                                {% endif %}
+                            </td>
+                            <td class="most_data">
+                                {% if i < report.most_chairmans_5_years|length %}
+                                    {{ report.most_chairmans_5_years[i][0] }}: {{ report.most_chairmans_5_years[i][1] }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
         </td>
         <td width="(100/4)%">
             <table border=1 frame=void rules=rows>
-                <tr>
-                    <th>
-                        <h2>Top EI Count</h2>
+                <tr class="most_row">
+                    <th class="most_data" colspan="2">
+                        Most EI
                     </th>
                 </tr>
-                {% for team in report.most_ei %}
-                    <tr>
-                        <td>
-                            {{ team[0] }}: {{ team[1] }}
-                        </td>
-                    </tr>
+                <tr class="most_row">
+                    <th class="most_data">All-Time</th>
+                    <th class="most_data">Past 5 Years</th>
+                </tr>
+                {% for i in range(10) %}
+                    {% if i < report.most_wins|length or i < report.most_wins_5_years|length %}
+                        <tr class="most_row">
+                            <td class="most_data">
+                                {% if i < report.most_ei|length %}
+                                    {{ report.most_ei[i][0] }}: {{ report.most_ei[i][1] }}
+                                {% endif %}
+                            </td>
+                            <td class="most_data">
+                                {% if i < report.most_ei_5_years|length %}
+                                    {{ report.most_ei_5_years[i][0] }}: {{ report.most_ei_5_years[i][1] }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
         </td>
